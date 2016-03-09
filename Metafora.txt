@@ -1,1 +1,1 @@
-Rozvrh je nieco navigacná tabula pre žiakov aj ucitelov.
+Rozvrh je nieco ako navigacná tabula pre žiakov aj ucitelov.
