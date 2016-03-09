@@ -1,0 +1,26 @@
+Pribehy na prve tri tyzdne:
+Pouzivatel si zela zobrazit na zaciatku prazdnu tabulku a policko na zadanie nazvu predmetu. - 4 hod. 
+Neskor by mala aplikacia reagovat na zadanie nazvu predmetu do prazdneho policka na predmety a mala by reagovat ponukou predmetou na pouzivatelov 
+vstup. - 4 hod.
+Po splneni predchodzich podmienok by sa mal dat predmet do velkej tabulky, ktora bude mat tvar rozvrhu hodin. - 4 hod.
+ 
+Pribehy na druhe tri tyzdne:
+Rozvrh by mal rozlisovat medzi prihlasenym pouzivatelom a neprihlasenym pouzivatelom. Mal by teda obsahovat moznost 
+registracie a nasledneho prihlasenia na registrovany ucet. - 6 hod.
+Aplikacia si zatial nepamata rozvrh definovan˝ prihlasenym pouzivatelom, to si nechame na koniec.  - 5 hod.
+
+Pribehy na tretie tri tyzdne:
+Aplikacia dostane pamat na ukladanie rozvrhu pre registrovanych a prihlasenych pouzivatelov. - 4 hod. Aplikacia by uz mala 
+uspokojit potreby pokrocileho pouzivatela a mala by hladaù predmety podla nazvu, ucitela ci miestnosti. - 6 hod.
+
+
+Prva iteracia :
+
+Vytvorenie zakladenej struktury aplikacie  2 hod.
+Vytvorenie dizajnu aplikacie 3 hod.
+Navrh databazy 3 hod.
+Implementovat vytvaranie rozvhrhu 4 hod.
+
+Zodpovedny Mariana Jonis a Lubomir Hrzic
+
+
