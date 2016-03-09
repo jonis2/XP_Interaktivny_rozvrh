@@ -1,0 +1,1 @@
+Projekt Interaktívny rozvh na predmet Extrémne programovanie. Tým Marián Jonis  a Lubomír Hrzic.
