@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Interaktívny rozvrh</title>
+<script>
+function Klik() {
+  if (document.getElementById('polozka').value != "")
+	  window.alert('Nastala zmena vo formulári: ' + document.getElementById('polozka').value);
+}
+</script>
+</head>
+<body>
+<form method="post" id="form1">
+  <p>
+    <label for="polozka">Hľadať: </label><input type="text" name="polozka" id="polozka" onkeypress="Klik()">
+  </p>
+</form>
+<table border="1">
+  <caption>
+  Predmet  
+  </caption>
+<thead>
+  <tr>
+    <th rowspan="2">Vyhľadaný predmet</th>
+  </tr>
+</thead>
+<tfoot><tr><td colspan="6">Všetky predmety vyhovujúce opisu.</td></tr></tfoot> 
+<tbody>
+  <tr>
+    <td>Predmet 1</td>
+  </tr>
+  <tr>
+    <td>Predmet 2</td>
+  </tr>
+</tbody>
+</table>
+</section>
+<footer>
+<p>Vytvoril: <strong><em>Marián Jonis a Ľubomír Hrzič</em></strong></p>
+</footer>
+</body>
+</html>
