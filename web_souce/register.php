@@ -4,12 +4,37 @@ hlavicka('Registrácia');
 ?>
   <div class="container">
     <section>
-      <p>Registracia</p><!-- TODO REgistracia -->
-	  <form method="post" id="form1">
-		<label for="meno">Meno a priezvisko: </label><input type="text" name="meno" id="meno">
-	    <label for="email">E-mail: </label><input type="text" name="email" id="email">
-	    <label for="heslo">Heslo: </label><input type="password" name="heslo" id="heslo">
-	    <input type="submit" value="Prihlásiť">
+      <h2>Registracia</h2>
+	  <form method="post" id="form1" class="form-horizontal" >
+    <div class="form-group">
+	    <label class="control-label col-sm-2" for="email">E-mail: </label>
+      <div class="col-sm-10">
+      <input type="email" name="email" id="email">
+      </div>
+    </div>
+    <div class="form-group">
+	    <label class="control-label col-sm-2" for="name">Meno: </label>
+      <div class="col-sm-10">
+      <input type="text" name="name" id="name">
+      </div>
+    </div>
+    <div class="form-group">
+	    <label class="control-label col-sm-2" for="heslo">Heslo: </label>
+      <div class="col-sm-10">
+      <input type="password" name="heslo" id="heslo">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="rheslo">Heslo - znovu: </label>
+        <div class="col-sm-10">
+        <input type="password" name="rheslo" id="rheslo">
+        </div>
+      </div>
+    <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+	    <input type="submit" name="reg" value="Rigistrovať">
+      </div>
+    </div>
 	  </form>
     </section>
     </div>  <!-- CONTAINER -->

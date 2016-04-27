@@ -2,18 +2,27 @@
 include('data.php');
 hlavicka('Rozvrh');
 ?>
-<script>
-function Klik() {
-  if (document.getElementById('polozka').value != "")
-	  window.alert('Nastala zmena vo formulári: ' + document.getElementById('polozka').value);
-}
-</script>
  <div class="container">
-    <section>
-      <p>ROZVRH VYHLADANIE</p><!-- TODO VYHLADAVANIE A ROZVRH -->
-	  <label for="polozka">Hľadať: </label><input type="text" name="polozka" id="polozka" onkeyup="Klik()">
-    </section>
-  </div>  <!-- CONTAINER -->
+ <section>
+ <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th class="text-center">Čas</th>
+              <th class="text-center">Pondelok</th>
+              <th class="text-center">Utorok</th>
+              <th class="text-center">Streda</th>
+              <th class="text-center">Štvrtok</th>
+              <th class="text-center">Piatok</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+            make_table();
+            ?>
+          </tbody>
+  </table>
+ </section>
+ </div>  <!-- CONTAINER -->
 <?php
 pata();
 ?>                                                      

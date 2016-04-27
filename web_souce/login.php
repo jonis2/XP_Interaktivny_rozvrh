@@ -4,8 +4,11 @@ hlavicka('Prihlásenie');
 ?>
  <div class="container">
     <section>
-      <p>LOGIN</p><!-- TODO LOGIN-->
-	  <form method="post" id="form1" class="form-horizontal" >
+     <?php if (isset($_SESSION['login']) && $_SESSION['login']== true){ ?>
+     <p  class="lead"> Ste ptihlásený</p>
+      <?php } else { ?>
+      <h2>Prihlasovanie</h2>
+	  <form id="form1" class="form-horizontal" >
     <div class="form-group">
 	    <label class="control-label col-sm-2" for="email">E-mail: </label>
       <div class="col-sm-10">
@@ -19,11 +22,12 @@ hlavicka('Prihlásenie');
       </div>
     </div>
     <div class="form-group">
-    <div class="col-sm-12">
-	    <input type="submit" value="Prihlásiť">
+    <div class="col-sm-offset-2 col-sm-10">
+	    <input type="submit" name="log" value="Prihlásiť">
       </div>
     </div>
 	  </form>
+     <?php }?>
     </section>
   </div>  <!-- CONTAINER -->
 <?php
