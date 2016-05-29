@@ -27,8 +27,27 @@ hlavicka('Testy');
             test("Login name",$_SESSION['name'],"admin");
             test("Login email",$_SESSION['email'],"admin@ir.com");
             logout();
-            test("logout session",isset($_SESSION['login']),"1");
-            test("logout session",$_SESSION['login'],false);
+            test("logout session isset",isset($_SESSION['login']),"1");
+            test("logout session false",$_SESSION['login'],false);
+            test("isert user",insert_user("test","tes@test.test","testh"),true);
+            $_GET['email'] = "tes@test.test";
+            $_GET['heslo'] = "testh";
+            login();
+            test("Login new user",$_SESSION['login'],true);
+            test("Login new user name",$_SESSION['name'],"test");
+            test("Login new user email",$_SESSION['email'],"tes@test.test");
+            test("get item 0",get_item(0),"8:10");
+            test("teachers",get_all_teachers()['test'],null);
+            $_GET['add'] = "1";
+            user_add_del_fav();
+            get_my_favs();
+            test("fav add",is_fav(1),true);
+            $_GET['del'] = "1";
+            user_add_del_fav();
+            get_my_favs();
+            test("fav del",is_fav(1),false);
+            //test("get subjects",get_all_subjects()[0][0],"8:10");
+
             ?>
           </tbody>
         </table>

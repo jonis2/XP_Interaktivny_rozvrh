@@ -1,6 +1,10 @@
 <?php
 include('data.php');
 hlavicka('Rozvrh');
+if (isset($_SESSION['login']) && $_SESSION['login']== true){
+  user_add_del_fav();
+  get_my_favs();
+}
 ?>
  <div class="container">
  <section>
@@ -21,6 +25,8 @@ hlavicka('Rozvrh');
             ?>
           </tbody>
   </table>
+  <h3>Zoznam predmetov </h3>
+   <?php make_sub_list(); ?>
  </section>
  </div>  <!-- CONTAINER -->
 <?php

@@ -4,8 +4,17 @@ hlavicka('Registrácia');
 ?>
   <div class="container">
     <section>
+    <?php
+        if (isset($_SESSION['register']) && !$_SESSION['register']){ 
+          echo '<p class="lead"> Registrácia neúspešná skúste znovu</p>';
+        }
+        if (isset($_SESSION['register']) &&   $_SESSION['register']){
+          echo '<p class="lead"> Registrácia úspešná môžete sa prihlásiť</p>';
+          unset($_SESSION['register']);
+        } else {
+      ?>
       <h2>Registracia</h2>
-	  <form method="post" id="form1" class="form-horizontal" >
+	  <form  id="form1" class="form-horizontal" >
     <div class="form-group">
 	    <label class="control-label col-sm-2" for="email">E-mail: </label>
       <div class="col-sm-10">
@@ -36,6 +45,9 @@ hlavicka('Registrácia');
       </div>
     </div>
 	  </form>
+    <?php
+        }
+     ?>
     </section>
     </div>  <!-- CONTAINER -->
 <?php

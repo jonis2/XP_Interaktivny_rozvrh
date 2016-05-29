@@ -1,7 +1,6 @@
 <?php
  session_start();
  error_reporting(-1);
- $times = array("8:10","9:00","9:50","10:40","11:30","12:20","13:10","14:00","14:50","15:40","16:30","17:20","18:10","19:00");
 function test_input($data) {
   $data = trim($data);
   $data = stripslashes($data);
@@ -16,6 +15,20 @@ function connect_db() {
     return  $conn;
   }
 }
+function user_add_del_fav(){
+ if (isset($_GET['add'])){
+  if ($con = connect_db()) {
+    $query = 'INSERT INTO favourite SET sub_id="'.$_GET['add'].'",user_id="'.$_SESSION['id'].'"';
+		$res = $con->query($query);
+  }
+ }
+ if (isset($_GET['del'])){
+ if ($con = connect_db()) {
+    $query = 'DELETE FROM favourite WHERE sub_id="'.$_GET['del'].'" AND user_id="'.$_SESSION['id'].'"';
+		$res = $con->query($query);
+   }
+ }
+}
 function get_user($email,$pass){
 	if ($con = connect_db()) {
 		$query = 'SELECT * FROM users WHERE email="'.$email.'" AND passwd="'.$pass.'"'; 
@@ -25,6 +38,8 @@ function get_user($email,$pass){
         $_SESSION['login'] = true;
 	      $_SESSION['name'] = $row['name'];
 	      $_SESSION['email'] = $row['email'];
+        $_SESSION['id'] = $row['id'];
+        get_my_favs();
         return  $row['name'];
 			}
     } else {
@@ -33,6 +48,67 @@ function get_user($email,$pass){
 	  	$con->close();
   } else {
     return "conection error"; 
+  }
+}
+function get_all_subjects(){
+         if ($con = connect_db()) {
+		$query = 'SELECT * FROM subjecst'; 
+		$result = $con->query($query); 
+    if ($result->num_rows > 0) {
+     $res = [];
+			while ($row = $result->fetch_assoc()) {
+        array_push ( $res,$row);  
+			}
+      return $res;
+    } else {
+      return [];
+    }
+	  	$con->close();
+  } else {
+    return []; 
+  }
+}
+function get_my_favs(){
+  if ($con = connect_db()) {
+		$query = 'SELECT * FROM favourite WHERE user_id="'.$_SESSION['id'].'"'; 
+		$result = $con->query($query); 
+    $_SESSION['fav'] = [];
+    if ($result->num_rows > 0) {
+     //$_SESSION['fav'] = [];
+			while ($row = $result->fetch_assoc()) {
+        array_push ($_SESSION['fav'],$row);
+			}
+      return $res;
+    } else {
+      return [];
+    }
+	  	$con->close();
+  } else {
+    return []; 
+  }
+}
+function get_all_teachers(){
+  if ($con = connect_db()) {
+		$query = 'SELECT * FROM teachers'; 
+		$result = $con->query($query); 
+    if ($result->num_rows > 0) {
+     $res = [];
+			while ($row = $result->fetch_assoc()) {
+        	$query = 'SELECT * FROM users WHERE id="'.$row['user_id'].'"'; 
+		      $ress = $con->query($query);
+           if ($ress->num_rows > 0) {
+			       while ($roww = $ress->fetch_assoc()) {
+                $res[$row['id']] = $roww; 
+             }
+           } 
+			}
+      return $res;
+    } else {
+      return [];
+    }
+	  	$con->close();
+  } else {
+    return []; 
   }
 }
 function insert_user($name,$email,$pwd){
@@ -76,7 +152,7 @@ administration();
             <li><a href="test.php">Testy</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <?php if (isset($_SESSION['login']) && $_SESSION['login']== true){ ?>
+            <?php if (isset($_SESSION['login']) && $_SESSION['login']== true){  ?>
             <li ><a href="index.php?out=true" > <span class="glyphicon glyphicon-log-in"></span>Odhlásiť sa (<?php echo $_SESSION['name']?>)</a> </li>
             <?php } else {  ?>
             <li><a href="register.php"><span class="glyphicon glyphicon-user"></span> Zaregistrovať sa </a></li>
@@ -115,26 +191,128 @@ function test($name,$res,$exp){
   echo  '<td>'.$exp.'</td>';
   echo '</tr>';
 }
-function cal_row($time){
-  $po ="...";
-  $ut ="...";
-  $st ="...";
-  $sk ="...";
-  $pi ="...";
+function cal_row($time,$subs){
+  $days['1'] ="";
+  $days['2'] ="";
+  $days['3'] = "";
+  $days['4'] ="";
+  $days['5']="";
+  $t = intval(str_replace(':',"",$time));
+  foreach($subs  as $sub){
+     $start = intval(str_replace(':',"",$sub['start']));
+     $end = intval(str_replace(':',"",$sub['end']));
+     if (isset($_SESSION['login']) && $_SESSION['login']== true){
+      if ($start <= $t  && $end > $t && is_fav($sub['id'])  ){
+            if($days[$sub['day']] == ""){
+              $days[$sub['day']] .= $sub['name'];
+            } else {
+              $days[$sub['day']] .= ", " . $sub['name'];
+            }
+      }
+     } else{
+     
+      if ($start <= $t  && $end > $t){
+            if($days[$sub['day']] == ""){
+              $days[$sub['day']] .= $sub['name'];
+            } else {
+              $days[$sub['day']] .= ", " . $sub['name'];
+            }
+      }
+    }
+    
+  }
   echo '<tr class="text-center">';
   echo  '<td class="info lead text-center">'.$time.'</td>';
-  echo  '<td class="text-center">'.$po.'</td>';
-  echo  '<td class="text-center">'.$ut.'</td>';
-  echo  '<td class="text-center">'.$st.'</td>';
-  echo  '<td class="text-center">'.$sk.'</td>';
-  echo  '<td class="text-center">'.$pi.'</td>';
+ /* for($i = 1; i < 6; $i+= 1){
+     echo  '<td class="text-center danger">'.$days[$i].'</td>';
+  }         */
+  if ($days['1'] == ""){
+    echo  '<td class="text-center success"></td>';
+  }else {
+    echo  '<td class="text-center danger">'.$days['1'].'</td>';
+  }
+  if ($days['2'] == ""){
+    echo  '<td class="text-center success"></td>';
+  }else {
+    echo  '<td class="text-center danger">'.$days['2'].'</td>';
+  }
+  if ($days['3'] == ""){
+    echo  '<td class="text-center success"></td>';
+  }else {
+    echo  '<td class="text-center danger">'.$days['3'].'</td>';
+  }
+  if ($days['4'] == ""){
+    echo  '<td class="text-center success"></td>';
+  }else {
+    echo  '<td class="text-center danger">'.$days['4'].'</td>';
+  }
+  if ($days['5'] == ""){
+    echo  '<td class="text-center success"></td>';
+  }else {
+    echo  '<td class="text-center danger">'.$days['5'].'</td>';
+  } 
   echo '</tr>';
 }
 function make_table(){
-   // cal_row($times[1]);
-    for ($i = 8;$i < 19;$i++) {
-     cal_row(strval($i));
+   $subs = get_all_subjects();
+   $times = ["8:10","9:00","9:50","10:40","11:30","12:20","13:10","14:00","14:50","15:40","16:30","17:20","18:10","19:00"];
+    foreach ($times as $i) {
+     cal_row($i,$subs);
+    }
+}
+function is_fav($sid){
+  foreach ($_SESSION['fav'] as $f) {
+     if ($f['sub_id'] == $sid){
+      return true;
      }
+  }
+  return false;
+}
+function make_sub_list(){
+  $days['1'] = "Pondelok";
+  $days['2'] = "Utorok";
+  $days['3'] = "Streda";
+  $days['4'] = "Štvrtok";
+  $days['5'] = "Piatok";
+  $teachs = get_all_teachers();
+  $subs = get_all_subjects();
+  ?>
+  <table class="table table-hover">
+          <thead>
+            <tr>
+              <th class="text-center">Názov predmetu</th>
+              <th class="text-center">Začiatok</th>
+              <th class="text-center">Koniec</th>
+              <th class="text-center">Deň</th>
+              <th class="text-center">Učiteľ</th>
+              <?php if (isset($_SESSION['login']) && $_SESSION['login']== true){ ?><th class="text-center">Moj rozvrh</th>   <?php
+              } ?>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+              foreach ($subs as $sub) {
+               echo "<tr>";
+               echo '<td class="text-center">'.$sub['name'].'</td>';
+               echo '<td class="text-center">'.$sub['start'].'</td>';
+               echo '<td class="text-center">'.$sub['end'].'</td>';
+               echo '<td class="text-center">'.$days[$sub['day']].'</td>';
+               echo '<td class="text-center">'.$teachs[$sub['teacher_id']]['name'].'</td>';
+               if (isset($_SESSION['login']) && $_SESSION['login']== true){
+                 if (is_fav($sub['id'])){
+                   echo '<td class="text-center"><a href="index.php?del='.$sub['id'].'"><span class="glyphicon glyphicon-star" style="color:yellow"></span></a></td>';
+                 } else {
+                   echo '<td class="text-center"><a href="index.php?add='.$sub['id'].'"><span class="glyphicon glyphicon-star-empty" style="color:yellow"></span></a></td>';
+                 }
+               }
+               echo "</tr>";
+                  
+               }
+            ?>
+          </tbody>
+  </table>
+  <?php
+  
 }
 function login(){
   if (isset($_GET['email']) && isset($_GET['heslo'])){ 
@@ -146,9 +324,20 @@ if (isset($_SESSION['login'])){
       $_SESSION['login'] = false;
       $_SESSION['name'] = "";
       $_SESSION['email'] = "";
+      $_SESSION['fav'] = null;
   }
 }
-function loregister(){
+function register(){
+   $name = test_input($_GET['name']);
+   $email = test_input($_GET['email']);
+   $pwd = test_input($_GET['heslo']);
+   $rpwd = test_input($_GET['rheslo']);
+   $_SESSION['register'] = false;
+   if ($name == $_GET['name'] && $email == $_GET['email'] && $pwd == $_GET['heslo'] && $rpwd == $_GET['rheslo'] && $pwd == $rpwd){
+      if (insert_user($name,$email,$pwd)) {
+        $_SESSION['register'] = true;
+      }
+   }
 }
 function administration(){
   if (isset($_GET['log'])){
@@ -161,5 +350,9 @@ function administration(){
     register();
   }
 
+}
+function get_item( $ti){
+ $times = ["8:10","9:00","9:50","10:40","11:30","12:20","13:10","14:00","14:50","15:40","16:30","17:20","18:10","19:00"];
+ return  $times[$ti];
 }
 
